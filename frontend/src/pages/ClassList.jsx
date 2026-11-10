@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { api } from '../api.js'
+import Hero from '../components/Hero.jsx'
 
 export default function ClassList({ valid, onOpenHold }) {
   const [classes, setClasses] = useState(null)
   const [error, setError] = useState('')
   const [busyId, setBusyId] = useState('')
+  const [query, setQuery] = useState('')
+  const [sort, setSort] = useState('name')
 
   async function load() {
     try {
@@ -36,8 +39,38 @@ export default function ClassList({ valid, onOpenHold }) {
     }
   }
 
+  const totals = useMemo(() => {
+    const t = { classes: 0, seats: 0, held: 0, confirmed: 0, available: 0 }
+    for (const c of classes || []) {
+      t.classes += 1
+      t.seats += c.totalSeats
+      t.held += c.heldSeats
+      t.confirmed += c.confirmedSeats
+      t.available += Math.max(0, c.availableSeats)
+    }
+    return t
+  }, [classes])
+
+  const visible = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    const list = (classes || []).filter((c) => c.name.toLowerCase().includes(q))
+    if (sort === 'available') list.sort((a, b) => b.availableSeats - a.availableSeats)
+    else list.sort((a, b) => a.name.localeCompare(b.name))
+    return list
+  }, [classes, query, sort])
+
   return (
     <>
+      <Hero />
+
+      <div className="overview">
+        <div className="ov"><span>মোট class</span><b>{totals.classes}</b></div>
+        <div className="ov"><span>মোট seat</span><b>{totals.seats}</b></div>
+        <div className="ov amber"><span>Hold-এ আছে</span><b>{totals.held}</b></div>
+        <div className="ov green"><span>ভর্তি নিশ্চিত</span><b>{totals.confirmed}</b></div>
+        <div className="ov primary"><span>খালি seat</span><b>{totals.available}</b></div>
+      </div>
+
       <div className="row-between">
         <div>
           <h2 className="page-title">Class তালিকা</h2>
@@ -53,19 +86,40 @@ export default function ClassList({ valid, onOpenHold }) {
       )}
       {error && <div className="alert alert-error">{error}</div>}
 
+      <div className="toolbar">
+        <input
+          className="input"
+          placeholder="Class খুঁজুন (যেমন: Class 6)"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <select className="input" value={sort} onChange={(e) => setSort(e.target.value)}>
+          <option value="name">নাম অনুযায়ী</option>
+          <option value="available">বেশি খালি seat আগে</option>
+        </select>
+      </div>
+
       {classes === null && !error && <div className="empty">লোড হচ্ছে...</div>}
       {classes && classes.length === 0 && (
         <div className="card empty">এখনো কোনো class নেই। "Class তৈরি" ট্যাব থেকে একটা বানান।</div>
       )}
+      {classes && classes.length > 0 && visible.length === 0 && (
+        <div className="card empty">এই নামে কোনো class পাওয়া যায়নি।</div>
+      )}
 
       <div className="grid">
-        {classes?.map((c) => {
+        {visible.map((c) => {
           const pctConfirmed = (c.confirmedSeats / c.totalSeats) * 100
           const pctHeld = (c.heldSeats / c.totalSeats) * 100
           const full = c.availableSeats <= 0
+          const low = !full && c.availableSeats / c.totalSeats <= 0.1
           return (
             <div className="card" key={c.id}>
-              <div className="class-name">{c.name}</div>
+              <div className="chip-row">
+                <div className="class-name">{c.name}</div>
+                {full && <span className="chip chip-full">Seat শেষ</span>}
+                {low && <span className="chip chip-warn">শেষ হয়ে আসছে</span>}
+              </div>
               <div className="bar">
                 <div className="confirmed" style={{ width: pctConfirmed + '%' }} />
                 <div className="held" style={{ width: pctHeld + '%' }} />
