@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: school
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d school"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  backend:
+    build: ./backend
+    ports:
+      - "8080:8080"
+    environment:
+      ConnectionStrings__Default: "Host=db;Port=5432;Database=school;Username=postgres;Password=postgres"
+      HOLD_DURATION_SECONDS: "600"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: http://localhost:8080
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  tests:
+    build: ./backend.Tests
+    profiles: ["test"]
+    environment:
+      API_URL: http://backend:8080
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
