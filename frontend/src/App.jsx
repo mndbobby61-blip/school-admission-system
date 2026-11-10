@@ -32,7 +32,7 @@ export default function App() {
   }
 
   return (
-    <>
+    <div className="app-shell">
       <header className="header">
         <div className="container">
           <div className="header-top">
@@ -81,6 +81,6 @@ export default function App() {
       </main>
 
       <Footer />
-    </>
+    </div>
   )
 }
