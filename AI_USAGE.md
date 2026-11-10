@@ -13,6 +13,7 @@ Claude (Anthropic)
 ## যা নিজে করেছি
 - Assignment পুরোটা পড়ে প্রয়োজন বুঝেছি এবং কাজ ধাপে ধাপে ভাগ করেছি।
 - **UI design নিজে করেছি কিছুতা পরে আই দিয়ে আপডেট করে নিয়েছি:** ।
+- UI-র খসড়া, CSS আর section (hero, overview, search, FAQ, নিয়ম, যোগাযোগ, footer) করেছি আর সব flow নিজে browser-এ যাচাই করেছি।
 - Class/Shift dropdown করা ।
 - প্রতিটা ধাপ আলাদা commit করে GitHub-এ push করেছি।
 - Docker চালিয়ে browser-এ সব flow হাতে যাচাই করেছি: class বানানো, আবেদন, উল্টো গোনা, ফি দেওয়া, বাতিল, "আমার আবেদন"।
