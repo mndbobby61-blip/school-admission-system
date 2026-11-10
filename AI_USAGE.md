@@ -12,7 +12,8 @@ Claude (Anthropic)
 
 ## যা নিজে করেছি
 - Assignment পুরোটা পড়ে প্রয়োজন বুঝেছি এবং কাজ ধাপে ধাপে ভাগ করেছি।
-- **UI design নিজে করেছি:** [রং, layout, spacing, font বা component-এ নিজে কী কী বদলেছেন, যেমন "header-এর রং বদলেছি", "card-এর আকার ঠিক করেছি", "mobile-এ দেখতে ঠিক করেছি"]।
+- **UI design নিজে করেছি কিছুতা পরে আই দিয়ে আপডেট করে নিয়েছি:** ।
+- Class/Shift dropdown করা ।
 - প্রতিটা ধাপ আলাদা commit করে GitHub-এ push করেছি।
 - Docker চালিয়ে browser-এ সব flow হাতে যাচাই করেছি: class বানানো, আবেদন, উল্টো গোনা, ফি দেওয়া, বাতিল, "আমার আবেদন"।
 - Concurrency test চালিয়ে ফল দেখেছি।
