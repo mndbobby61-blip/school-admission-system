@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { getStudentId, setStudentId } from './api.js'
 import { isValidStudentId } from './lib/format.js'
+import Contact from './components/Contact.jsx'
 import Footer from './components/Footer.jsx'
 import ClassList from './pages/ClassList.jsx'
 import CreateClass from './pages/CreateClass.jsx'
@@ -79,7 +80,8 @@ export default function App() {
         {tab === 'hold' && <HoldStatus holdId={holdId} valid={valid} onBack={() => setTab('mine')} />}
         {tab === 'create' && <CreateClass onCreated={() => setTab('classes')} />}
       </main>
-
+      
+      <Contact />
       <Footer />
     </div>
   )

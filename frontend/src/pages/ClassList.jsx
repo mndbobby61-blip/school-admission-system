@@ -1,3 +1,5 @@
+import Faq from '../components/Faq.jsx'
+import Rules from '../components/Rules.jsx'
 import { useEffect, useMemo, useState } from 'react'
 import { api } from '../api.js'
 import Hero from '../components/Hero.jsx'
@@ -141,6 +143,8 @@ export default function ClassList({ valid, onOpenHold }) {
           )
         })}
       </div>
+      <Rules />
+    <Faq />
     </>
   )
 }
